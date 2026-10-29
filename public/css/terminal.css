@@ -1,0 +1,91 @@
+/* EMULADOR DE TERMINAL ROUTEROS INTERATIVO */
+.terminal-window {
+  background-color: #05080f;
+  border: 1px solid #1a253a;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  height: 380px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.8);
+  font-family: var(--font-mono);
+}
+
+.terminal-titlebar {
+  background-color: #0d1422;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #1a253a;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.terminal-dots {
+  display: flex;
+  gap: 6px;
+}
+
+.terminal-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.terminal-dot.red { background-color: #ef4444; }
+.terminal-dot.yellow { background-color: #f59e0b; }
+.terminal-dot.green { background-color: #10b981; }
+
+.terminal-body {
+  flex: 1;
+  padding: 12px;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.45;
+  color: #38bdf8;
+  display: flex;
+  flex-direction: column;
+}
+
+.terminal-banner {
+  color: #0ea5e9;
+  margin-bottom: 12px;
+  white-space: pre;
+  font-size: 11px;
+}
+
+.terminal-output-line {
+  white-space: pre-wrap;
+  word-break: break-all;
+  margin-bottom: 3px;
+}
+
+.terminal-output-line.system { color: #94a3b8; }
+.terminal-output-line.error { color: #f87171; }
+.terminal-output-line.success { color: #4ade80; }
+.terminal-output-line.warning { color: #fbbf24; }
+
+.terminal-input-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.terminal-prompt {
+  color: #4ade80;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.terminal-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: #f8fafc;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  outline: none;
+  caret-color: #38bdf8;
+}

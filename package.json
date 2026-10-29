@@ -1,0 +1,23 @@
+{
+  "name": "academia-tecnica-mikrotik",
+  "version": "1.0.0",
+  "description": "Plataforma Web de Treinamento Técnico Profissional MikroTik RouterOS para Provedores de Internet",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "mikrotik",
+    "routeros",
+    "treinamento",
+    "isp",
+    "redes",
+    "winbox",
+    "firewall",
+    "vlan"
+  ],
+  "author": "Bismak Treinamentos",
+  "license": "MIT"
+}

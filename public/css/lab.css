@@ -1,0 +1,155 @@
+/* ESTILOS DE LABORATÓRIO PRÁTICO E TROUBLESHOOTING */
+.lab-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lab-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 960px) {
+  .lab-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.topology-viewer {
+  background-color: #060a13;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 16px;
+  min-height: 260px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.topology-svg {
+  width: 100%;
+  height: 220px;
+}
+
+/* Evidências e Ferramentas */
+.tools-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+  flex-wrap: wrap;
+}
+
+.tool-btn {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  color: var(--text-secondary);
+  font-size: 12px;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tool-btn:hover {
+  background-color: var(--bg-elevated);
+  color: var(--accent-light);
+  border-color: var(--border-focus);
+}
+
+.tool-btn.active {
+  background-color: rgba(2, 132, 199, 0.2);
+  color: var(--accent-light);
+  border-color: var(--accent-primary);
+}
+
+.console-output-box {
+  background-color: #04070d;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  padding: 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #38bdf8;
+  height: 180px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+/* Formulário de Diagnóstico / Hipótese */
+.lab-solve-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 20px;
+}
+
+.lab-textarea {
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  padding: 10px 12px;
+  resize: vertical;
+  min-height: 70px;
+  outline: none;
+}
+
+.lab-textarea:focus {
+  border-color: var(--accent-primary);
+}
+
+.lab-code-input {
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  color: #38bdf8;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 10px 12px;
+  outline: none;
+}
+
+.lab-code-input:focus {
+  border-color: var(--accent-primary);
+}
+
+/* Feedback do Laboratório */
+.lab-result-card {
+  border-radius: var(--radius-md);
+  padding: 16px 20px;
+  margin-top: 16px;
+  border: 1px solid transparent;
+}
+
+.lab-result-card.success {
+  background-color: rgba(16, 185, 129, 0.1);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.lab-result-card.failed {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.lab-result-title {
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.lab-result-card.success .lab-result-title { color: var(--status-success); }
+.lab-result-card.failed .lab-result-title { color: var(--status-danger); }

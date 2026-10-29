@@ -1,0 +1,242 @@
+/* CERTIFICADO CORPORATIVO DE CONCLUSÃO INTERNA */
+.certificate-wrapper {
+  max-width: 860px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.certificate-paper {
+  background: linear-gradient(145deg, #0b1324 0%, #060a14 100%);
+  border: 4px double #0284c7;
+  border-radius: var(--radius-md);
+  padding: 48px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.85);
+  position: relative;
+  overflow: hidden;
+  color: #f8fafc;
+}
+
+.certificate-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-25deg);
+  font-size: 80px;
+  font-weight: 900;
+  color: rgba(2, 132, 199, 0.04);
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: 6px;
+  user-select: none;
+}
+
+.certificate-header {
+  text-align: center;
+  border-bottom: 2px solid rgba(2, 132, 199, 0.3);
+  padding-bottom: 24px;
+  margin-bottom: 32px;
+}
+
+.certificate-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #38bdf8;
+  background-color: rgba(2, 132, 199, 0.15);
+  padding: 4px 14px;
+  border-radius: 20px;
+  border: 1px solid rgba(2, 132, 199, 0.4);
+  margin-bottom: 12px;
+}
+
+.certificate-header h2 {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #f8fafc;
+}
+
+.certificate-body {
+  text-align: center;
+  margin-bottom: 36px;
+}
+
+.cert-certifies {
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 12px;
+}
+
+.cert-student-name {
+  font-size: 28px;
+  font-weight: 800;
+  color: #38bdf8;
+  margin-bottom: 16px;
+  font-family: 'Times New Roman', serif;
+  letter-spacing: 1px;
+  border-bottom: 1px solid #1e293b;
+  display: inline-block;
+  padding: 0 24px 6px;
+}
+
+.cert-text {
+  font-size: 15px;
+  color: #cbd5e1;
+  max-width: 680px;
+  margin: 0 auto 24px;
+  line-height: 1.6;
+}
+
+.cert-stats-grid {
+  display: flex;
+  justify-content: center;
+  gap: 36px;
+  margin-top: 24px;
+}
+
+.cert-stat-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.cert-stat-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.cert-stat-val {
+  font-size: 16px;
+  font-weight: 700;
+  color: #f1f5f9;
+  font-family: var(--font-mono);
+}
+
+.certificate-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  border-top: 1px solid rgba(38, 56, 89, 0.6);
+  padding-top: 24px;
+  margin-top: 24px;
+}
+
+.cert-signature {
+  text-align: center;
+}
+
+.cert-sign-line {
+  width: 180px;
+  height: 1px;
+  background-color: #64748b;
+  margin-bottom: 6px;
+}
+
+.cert-sign-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #e2e8f0;
+}
+
+.cert-sign-role {
+  font-size: 10px;
+  color: #64748b;
+}
+
+.cert-verification-box {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: #64748b;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cert-code {
+  color: #38bdf8;
+  font-weight: 700;
+}
+
+/* Aviso Legal Obrigatório */
+.cert-disclaimer {
+  margin-top: 24px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  background-color: rgba(15, 23, 42, 0.8);
+  border: 1px dashed #334155;
+  font-size: 11px;
+  color: #94a3b8;
+  text-align: center;
+  line-height: 1.4;
+}
+
+@media (max-width: 640px) {
+  .certificate-paper {
+    padding: 24px 16px;
+  }
+  .certificate-header h2 {
+    font-size: 20px;
+  }
+  .cert-student-name {
+    font-size: 20px;
+    padding: 0 10px 4px;
+  }
+  .cert-text {
+    font-size: 13px;
+  }
+  .cert-stats-grid {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .certificate-footer {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+  }
+  .cert-verification-box {
+    text-align: center;
+  }
+}
+
+
+/* Print Styles */
+@media print {
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  .sidebar, .topbar, .btn, .no-print {
+    display: none !important;
+  }
+  .content-viewport {
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+  .certificate-paper {
+    background: #ffffff !important;
+    color: #0f172a !important;
+    border: 3px double #0284c7 !important;
+    box-shadow: none !important;
+  }
+  .cert-student-name {
+    color: #0369a1 !important;
+  }
+  .certificate-header h2 {
+    color: #0f172a !important;
+  }
+  .cert-text {
+    color: #334155 !important;
+  }
+  .cert-disclaimer {
+    border-color: #cbd5e1 !important;
+    color: #475569 !important;
+  }
+}
