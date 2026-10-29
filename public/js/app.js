@@ -17,13 +17,56 @@ class App {
       initRouter(document.getElementById('content-viewport'));
     } catch (err) {
       console.info('Sessão não detectada ou expirada:', err.message);
-      if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError'))) {
-        this.renderServerOffline();
-      } else {
-        // Redireciona para tela de login individual
-        this.renderLogin();
-      }
+      // Redireciona para tela de login individual
+      this.renderLogin();
     }
+  }
+
+  renderCloudHostingModal() {
+    const existing = document.getElementById('cloud-hosting-modal');
+    if (existing) existing.remove();
+
+    const modal = document.createElement('div');
+    modal.id = 'cloud-hosting-modal';
+    modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.75); display:flex; align-items:center; justify-content:center; z-index:9999; padding:20px;';
+    modal.innerHTML = `
+      <div style="background:#0f172a; border:1px solid #1e293b; border-radius:12px; padding:28px; max-width:580px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.5); color:#f8fafc; font-family:'Inter', sans-serif;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h3 style="font-size:18px; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:8px;">
+            <span>☁️</span> Hospedagem Corporativa da Academia MikroTik
+          </h3>
+          <button id="close-hosting-modal" style="background:transparent; border:none; color:#94a3b8; font-size:20px; cursor:pointer; padding:4px 8px;">✕</button>
+        </div>
+        <p style="color:#94a3b8; font-size:13px; line-height:1.6; margin-bottom:16px;">
+          Você está navegando no <strong>Modo Web Autônomo</strong>. Seu progresso, notas e laboratórios são salvos com segurança neste navegador.
+        </p>
+        <p style="color:#cbd5e1; font-size:13px; line-height:1.6; margin-bottom:16px;">
+          Para implantar um <strong>Servidor Centralizado</strong> (onde o instrutor acompanha todos os técnicos simultaneamente e gera relatórios corporativos):
+        </p>
+        <div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:14px; font-family:'JetBrains Mono', monospace; font-size:12px; color:#4ade80; margin-bottom:18px; line-height:1.6;">
+          <span style="color:#64748b;"># Opção A: Servidor Linux / VPS do seu Provedor:</span><br>
+          git clone https://github.com/GustavoBismak/treinamentomikrotik.git<br>
+          cd treinamentomikrotik<br>
+          npm start<br><br>
+          <span style="color:#64748b;"># Opção B: Nuvem Gratuita (Render.com):</span><br>
+          Conecte seu repositório no Render.com como "Web Service" com Node 22.
+        </div>
+        <div style="display:flex; justify-content:flex-end; gap:10px;">
+          <a href="https://render.com" target="_blank" rel="noopener" style="background:#0284c7; color:#fff; text-decoration:none; padding:8px 16px; border-radius:6px; font-weight:600; font-size:13px; display:inline-flex; align-items:center; gap:6px;">
+            🚀 Ir para Render.com
+          </a>
+          <button id="btn-ok-hosting-modal" style="background:#1e293b; border:1px solid #334155; color:#f8fafc; padding:8px 16px; border-radius:6px; font-size:13px; font-weight:600; cursor:pointer;">
+            Entendido
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    const close = () => modal.remove();
+    modal.querySelector('#close-hosting-modal').addEventListener('click', close);
+    modal.querySelector('#btn-ok-hosting-modal').addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
   }
 
   renderLogin() {
@@ -192,9 +235,9 @@ class App {
               </button>
             </div>
 
-            <div class="system-pill">
-              <div class="system-indicator"></div>
-              <span>RouterOS v7 Online</span>
+            <div class="system-pill" id="system-status-pill" style="cursor:pointer;" title="${API.isStaticMode() ? 'Modo Web Autônomo. Clique para ver opções de servidor corporativo.' : 'Conectado ao Servidor Central ISP'}">
+              <div class="system-indicator" style="${API.isStaticMode() ? 'background:#38bdf8; box-shadow:0 0 8px rgba(56,189,248,0.6);' : ''}"></div>
+              <span>${API.isStaticMode() ? 'Web Autônomo' : 'RouterOS v7 Online'}</span>
             </div>
           </div>
         </header>
@@ -205,6 +248,10 @@ class App {
       <!-- Overlay para fechar sidebar no mobile -->
       <div class="sidebar-overlay" id="sidebar-overlay"></div>
     `;
+
+    document.getElementById('system-status-pill')?.addEventListener('click', () => {
+      this.renderCloudHostingModal();
+    });
 
     // Eventos de Logout
     const handleLogout = async () => {
@@ -334,8 +381,19 @@ function escapeHtml(s) {
 }
 
 function startApp() {
-  const app = new App();
-  app.init();
+  try {
+    const app = new App();
+    app.init().catch(err => {
+      console.error('Falha na inicialização do app:', err);
+      if (window.location.hostname.includes('github.io')) {
+        app.renderStaticDeploymentNotice();
+      } else {
+        app.renderLogin();
+      }
+    });
+  } catch (err) {
+    console.error('Falha síncrona:', err);
+  }
 }
 
 if (document.readyState === 'loading') {

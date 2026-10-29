@@ -846,7 +846,7 @@ p.page-subtitle {
 .auth-banner-showcase {
   flex: 1.1;
   position: relative;
-  background-image: url('/images/mikrotik_rack_setup.jpg');
+  background-image: url('../images/mikrotik_rack_setup.jpg');
   background-size: cover;
   background-position: center;
   display: flex;

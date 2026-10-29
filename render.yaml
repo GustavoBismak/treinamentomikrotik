@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: academia-tecnica-mikrotik
+    runtime: node
+    buildCommand: ""
+    startCommand: "npm start"
+    plan: free
+    envVars:
+      - key: NODE_VERSION
+        value: 22.16.0
+      - key: PORT
+        value: 3000

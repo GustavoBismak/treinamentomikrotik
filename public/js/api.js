@@ -1,5 +1,21 @@
-// CLIENTE API HTTP PARA COMUNICAÇÃO COM O BACKEND
+// CLIENTE API HTTP COM SUPORTE HÍBRIDO (BACKEND CORPORATIVO + MODO WEB AUTÔNOMO)
+import { LocalAPI } from './localApi.js';
+
+// Detecção de ambiente estático (GitHub Pages, etc.)
+const isStaticHost = 
+  window.location.hostname.includes('github.io') || 
+  window.location.hostname.includes('pages.dev') ||
+  window.location.protocol === 'file:';
+
+if (isStaticHost) {
+  LocalAPI.isStaticMode = true;
+}
+
 export const API = {
+  isStaticMode() {
+    return LocalAPI.isStaticMode;
+  },
+
   async request(endpoint, options = {}) {
     const defaultHeaders = {
       'Content-Type': 'application/json',
@@ -28,180 +44,272 @@ export const API = {
 
       return data;
     } catch (err) {
-      console.error(`Falha na requisição [${endpoint}]:`, err.message);
+      // Se a requisição falhar por falta de backend (servidor desligado ou host estático), ativa fallback
+      if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('404'))) {
+        LocalAPI.isStaticMode = true;
+      }
       throw err;
     }
   },
 
-  // Auth
-  getCurrentUser() {
-    return this.request('/api/auth/me');
-  },
-  async login(username, password) {
-    const data = await this.request('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password })
-    });
-    if (data.token) {
-      localStorage.setItem('isp_session_token', data.token);
+  async _exec(serverCall, localCall) {
+    if (LocalAPI.isStaticMode) {
+      return await localCall();
     }
-    return data;
-  },
-  async register(userData) {
-    const data = await this.request('/api/auth/register', {
-      method: 'POST',
-      body: JSON.stringify(userData)
-    });
-    if (data.token) {
-      localStorage.setItem('isp_session_token', data.token);
-    }
-    return data;
-  },
-  async logout() {
     try {
-      await this.request('/api/auth/logout', { method: 'POST' });
-    } catch (e) {
-      console.warn('Erro ao chamar logout no servidor:', e);
+      return await serverCall();
+    } catch (err) {
+      if (LocalAPI.isStaticMode || (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('404')))) {
+        LocalAPI.isStaticMode = true;
+        return await localCall();
+      }
+      throw err;
     }
-    localStorage.removeItem('isp_session_token');
   },
 
-  // Modules & Lessons
+  // --- AUTH ---
+  getCurrentUser() {
+    return this._exec(
+      () => this.request('/api/auth/me'),
+      () => LocalAPI.getCurrentUser()
+    );
+  },
+
+  async login(username, password) {
+    return this._exec(
+      async () => {
+        const data = await this.request('/api/auth/login', {
+          method: 'POST',
+          body: JSON.stringify({ username, password })
+        });
+        if (data.token) localStorage.setItem('isp_session_token', data.token);
+        return data;
+      },
+      () => LocalAPI.login(username, password)
+    );
+  },
+
+  async register(userData) {
+    return this._exec(
+      async () => {
+        const data = await this.request('/api/auth/register', {
+          method: 'POST',
+          body: JSON.stringify(userData)
+        });
+        if (data.token) localStorage.setItem('isp_session_token', data.token);
+        return data;
+      },
+      () => LocalAPI.register(userData)
+    );
+  },
+
+  async logout() {
+    return this._exec(
+      async () => {
+        try { await this.request('/api/auth/logout', { method: 'POST' }); } catch (e) {}
+        localStorage.removeItem('isp_session_token');
+        return { success: true };
+      },
+      () => LocalAPI.logout()
+    );
+  },
+
+  // --- MODULES & LESSONS ---
   getModules() {
-    return this.request('/api/modules');
+    return this._exec(
+      () => this.request('/api/modules'),
+      () => LocalAPI.getModules()
+    );
   },
+
   getModule(id) {
-    return this.request(`/api/modules/${id}`);
+    return this._exec(
+      () => this.request(`/api/modules/${id}`),
+      () => LocalAPI.getModule(id)
+    );
   },
+
   getLesson(id) {
-    return this.request(`/api/lessons/${id}`);
+    return this._exec(
+      () => this.request(`/api/lessons/${id}`),
+      () => LocalAPI.getLesson(id)
+    );
   },
+
   completeLesson(id) {
-    return this.request(`/api/lessons/${id}/complete`, { method: 'POST' });
+    return this._exec(
+      () => this.request(`/api/lessons/${id}/complete`, { method: 'POST' }),
+      () => LocalAPI.completeLesson(id)
+    );
   },
 
-  // Labs
+  // --- LABS ---
   getLabs() {
-    return this.request('/api/labs');
+    return this._exec(
+      () => this.request('/api/labs'),
+      () => LocalAPI.getLabs()
+    );
   },
+
   getLab(id) {
-    return this.request(`/api/labs/${id}`);
+    return this._exec(
+      () => this.request(`/api/labs/${id}`),
+      () => LocalAPI.getLab(id)
+    );
   },
+
   runLabTool(id, tool, target) {
-    return this.request(`/api/labs/${id}/test-tool`, {
-      method: 'POST',
-      body: JSON.stringify({ tool, target })
-    });
+    return this._exec(
+      () => this.request(`/api/labs/${id}/test-tool`, { method: 'POST', body: JSON.stringify({ tool, target }) }),
+      () => LocalAPI.runLabTool(id, tool, target)
+    );
   },
+
   submitLab(id, hypothesis, solutionCommand) {
-    return this.request(`/api/labs/${id}/submit`, {
-      method: 'POST',
-      body: JSON.stringify({ hypothesis, solutionCommand })
-    });
+    return this._exec(
+      () => this.request(`/api/labs/${id}/submit`, { method: 'POST', body: JSON.stringify({ hypothesis, solutionCommand }) }),
+      () => LocalAPI.submitLab(id, hypothesis, solutionCommand)
+    );
   },
 
-  // Quizzes & Assessments
+  // --- QUIZZES ---
   getQuiz(moduleId) {
-    return this.request(`/api/quizzes/${moduleId}`);
+    return this._exec(
+      () => this.request(`/api/quizzes/${moduleId}`),
+      () => LocalAPI.getQuiz(moduleId)
+    );
   },
+
   submitQuiz(moduleId, answers) {
-    return this.request(`/api/quizzes/${moduleId}/submit`, {
-      method: 'POST',
-      body: JSON.stringify({ answers })
-    });
+    return this._exec(
+      () => this.request(`/api/quizzes/${moduleId}/submit`, { method: 'POST', body: JSON.stringify({ answers }) }),
+      () => LocalAPI.submitQuiz(moduleId, answers)
+    );
   },
 
-  // Dashboard & Competencies
+  // --- DASHBOARD & COMPETENCIES ---
   getDashboardStats() {
-    return this.request('/api/dashboard/stats');
+    return this._exec(
+      () => this.request('/api/dashboard/stats'),
+      () => LocalAPI.getDashboardStats()
+    );
   },
+
   getCompetencies() {
-    return this.request('/api/competencies');
+    return this._exec(
+      () => this.request('/api/competencies'),
+      () => LocalAPI.getCompetencies()
+    );
   },
 
-  // Certificates
+  // --- CERTIFICATES ---
   getMyCertificate() {
-    return this.request('/api/certificates/my');
+    return this._exec(
+      () => this.request('/api/certificates/my'),
+      () => LocalAPI.getMyCertificate()
+    );
   },
+
   requestCertificate() {
-    return this.request('/api/certificates/request', { method: 'POST' });
+    return this._exec(
+      () => this.request('/api/certificates/request', { method: 'POST' }),
+      () => LocalAPI.requestCertificate()
+    );
   },
+
   verifyCertificate(hash) {
-    return this.request(`/api/certificates/verify/${hash}`);
+    return this._exec(
+      () => this.request(`/api/certificates/verify/${hash}`),
+      () => LocalAPI.verifyCertificate(hash)
+    );
   },
 
-  // Admin & Instructor
+  // --- ADMIN & INSTRUCTOR ---
   getAdminUsers() {
-    return this.request('/api/admin/users');
+    return this._exec(
+      () => this.request('/api/admin/users'),
+      () => LocalAPI.getAdminUsers()
+    );
   },
+
   createUser(userData) {
-    return this.request('/api/admin/users', {
-      method: 'POST',
-      body: JSON.stringify(userData)
-    });
+    return this._exec(
+      () => this.request('/api/admin/users', { method: 'POST', body: JSON.stringify(userData) }),
+      () => LocalAPI.register(userData)
+    );
   },
+
   deleteUser(userId) {
-    return this.request(`/api/admin/users/${userId}`, { method: 'DELETE' });
+    return this._exec(
+      () => this.request(`/api/admin/users/${userId}`, { method: 'DELETE' }),
+      () => Promise.resolve({ success: true })
+    );
   },
+
   getAdminReports() {
-    return this.request('/api/admin/reports');
+    return this._exec(
+      () => this.request('/api/admin/reports'),
+      () => LocalAPI.getAdminReports()
+    );
   },
+
   getAuditLogs() {
-    return this.request('/api/admin/audit-logs');
+    return this._exec(
+      () => this.request('/api/admin/audit-logs'),
+      () => LocalAPI.getAuditLogs()
+    );
   },
 
-  // Materiais de Apoio & POPs
+  // --- MATERIAIS DE APOIO & POPS ---
   getMaterials() {
-    return this.request('/api/materials');
+    return this._exec(
+      () => this.request('/api/materials'),
+      () => LocalAPI.getMaterials()
+    );
   },
 
-  // Projeto Final Corporativo
+  // --- PROJETO FINAL ---
   getFinalProject() {
-    return this.request('/api/final-project');
-  },
-  saveFinalProject(data) {
-    return this.request('/api/final-project/save', {
-      method: 'POST',
-      body: JSON.stringify(data)
-    });
-  },
-  getAdminFinalProjects() {
-    return this.request('/api/admin/final-projects');
-  },
-  reviewFinalProject(submissionId, reviewData) {
-    return this.request(`/api/admin/final-projects/${submissionId}/review`, {
-      method: 'POST',
-      body: JSON.stringify(reviewData)
-    });
+    return this._exec(
+      () => this.request('/api/final-project'),
+      () => LocalAPI.getFinalProject()
+    );
   },
 
-  // Busca Rápida Global
+  submitFinalProject(projectData) {
+    return this._exec(
+      () => this.request('/api/final-project/submit', { method: 'POST', body: JSON.stringify(projectData) }),
+      () => LocalAPI.submitFinalProject(projectData)
+    );
+  },
+
+  // --- SEARCH ---
   search(query) {
-    return this.request(`/api/search?q=${encodeURIComponent(query)}`);
+    return this._exec(
+      () => this.request(`/api/search?q=${encodeURIComponent(query)}`),
+      () => LocalAPI.search(query)
+    );
   },
 
-  // Perfil e Configurações
+  // --- PROFILE ---
   getProfile() {
-    return this.request('/api/auth/profile');
-  },
-  updateProfile(profileData) {
-    return this.request('/api/auth/profile', {
-      method: 'PUT',
-      body: JSON.stringify(profileData)
-    });
+    return this._exec(
+      () => this.request('/api/profile'),
+      () => LocalAPI.getProfile()
+    );
   },
 
-  // Editor de Conteúdo (Admin & Instrutor)
-  adminSaveLesson(lessonData) {
-    return this.request('/api/admin/content/lessons', {
-      method: 'POST',
-      body: JSON.stringify(lessonData)
-    });
+  updateProfile(data) {
+    return this._exec(
+      () => this.request('/api/profile', { method: 'PUT', body: JSON.stringify(data) }),
+      () => LocalAPI.updateProfile(data)
+    );
   },
-  adminSaveQuestion(questionData) {
-    return this.request('/api/admin/content/questions', {
-      method: 'POST',
-      body: JSON.stringify(questionData)
-    });
+
+  changePassword(passwords) {
+    return this._exec(
+      () => this.request('/api/profile/change-password', { method: 'POST', body: JSON.stringify(passwords) }),
+      () => LocalAPI.changePassword(passwords)
+    );
   }
 };

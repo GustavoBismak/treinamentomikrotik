@@ -41,17 +41,35 @@ A **Academia Técnica MikroTik** foi desenvolvida para capacitação e qualifica
 
 ---
 
-## 🚀 Como Executar em Produção
+## 🚀 Opções de Publicação e Produção
 
-### Pré-requisitos
-- **Node.js**: Versão 22 ou superior instalada (para suporte nativo ao `node:sqlite`).
+A plataforma possui **arquitetura híbrida**, suportando tanto hospedagem direta na web para os alunos quanto servidores corporativos centralizados:
 
-### Inicialização Rápida
+### Opção 1: GitHub Pages (Modo Web Autônomo — Imediato para Alunos)
+O repositório já está 100% pronto para o GitHub Pages:
+1. No seu repositório no GitHub, acesse **Settings -> Pages**.
+2. Em **Branch**, selecione `main` e a pasta `/ (root)`.
+3. Clique em **Save**.
+4. Em instantes, o link público estará ativo (ex: `https://gustavobismak.github.io/treinamentomikrotik/`).
+5. Seus alunos podem acessar diretamente pelo computador ou celular, cadastrar suas contas com e-mail/senha, estudar as aulas dos 15 módulos, realizar os simuladores de terminal e WinBox, responder avaliações e emitir certificados. O progresso individual fica salvo com segurança no navegador do aluno.
+
+---
+
+### Opção 2: Nuvem Gratuita 24/7 (Render.com / Railway — Banco Centralizado)
+Se desejar que o Gestor e o Instrutor acompanhem os relatórios de todos os alunos em tempo real num banco central:
+1. Crie uma conta gratuita em [render.com](https://render.com).
+2. Clique em **New + -> Web Service** e conecte seu repositório `treinamentomikrotik`.
+3. O Render detectará automaticamente o arquivo `render.yaml` e executará `npm start` com Node 22.
+4. Seu painel corporativo estará no ar com URL pública HTTPS permanente!
+
+---
+
+### Opção 3: Servidor Local ou VPS do Provedor (Linux / Windows)
 
 ```bash
 # 1. Clone o repositório
-git clone <URL_DO_SEU_REPOSITORIO>
-cd "Treinamento Mikrotik"
+git clone https://github.com/GustavoBismak/treinamentomikrotik.git
+cd treinamentomikrotik
 
 # 2. Inicie o servidor
 npm start

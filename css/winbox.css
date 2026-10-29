@@ -1,0 +1,248 @@
+/* SIMULADOR VISUAL REALISTA MIKROTIK WINBOX */
+.winbox-window {
+  background-color: #1e2638;
+  border: 1px solid #334460;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.8);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+  color: #e2e8f0;
+}
+
+.winbox-titlebar {
+  background: linear-gradient(180deg, #2b3952 0%, #1c273a 100%);
+  padding: 6px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #141c2a;
+  user-select: none;
+}
+
+.winbox-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.winbox-title-icon {
+  width: 14px;
+  height: 14px;
+  background-color: #0284c7;
+  border-radius: 2px;
+}
+
+.winbox-controls {
+  display: flex;
+  gap: 6px;
+}
+
+.winbox-btn-ctrl {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+  border: 1px solid #475569;
+  background: #334155;
+  cursor: pointer;
+}
+
+.winbox-btn-ctrl:hover {
+  background: #475569;
+}
+
+.winbox-btn-ctrl.close:hover {
+  background: #dc2626;
+  border-color: #ef4444;
+}
+
+/* Toolbar com Botão Safe Mode */
+.winbox-toolbar {
+  background-color: #161f30;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 1px solid #233148;
+}
+
+.winbox-tool-btn {
+  background: #25334c;
+  border: 1px solid #3b4e72;
+  color: #e2e8f0;
+  font-size: 11px;
+  padding: 3px 8px;
+  border-radius: 2px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.winbox-tool-btn:hover {
+  background: #334466;
+}
+
+.winbox-tool-btn.safe-mode {
+  background: #0f172a;
+  border-color: #475569;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.winbox-tool-btn.safe-mode.active {
+  background: #15803d;
+  border-color: #22c55e;
+  color: #ffffff;
+  box-shadow: 0 0 8px rgba(34, 197, 94, 0.4);
+}
+
+.winbox-body {
+  display: flex;
+  height: 380px;
+  background-color: #131b2b;
+}
+
+/* Menu Lateral Winbox */
+.winbox-sidebar {
+  width: 160px;
+  background-color: #162033;
+  border-right: 1px solid #263650;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.winbox-menu-item {
+  padding: 5px 12px;
+  font-size: 11px;
+  color: #cbd5e1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border-left: 2px solid transparent;
+}
+
+.winbox-menu-item:hover {
+  background-color: #223048;
+}
+
+.winbox-menu-item.active {
+  background-color: #0284c7;
+  color: #ffffff;
+  font-weight: 600;
+  border-left-color: #38bdf8;
+}
+
+/* Área de Conteúdo / Tabela WinBox */
+.winbox-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #0f1726;
+}
+
+.winbox-table-actions {
+  padding: 6px 10px;
+  background-color: #162033;
+  border-bottom: 1px solid #263650;
+  display: flex;
+  gap: 6px;
+}
+
+.winbox-action-icon {
+  width: 20px;
+  height: 20px;
+  background: #25334c;
+  border: 1px solid #3b4e72;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  color: #93c5fd;
+}
+
+.winbox-action-icon:hover {
+  background: #334466;
+}
+
+.winbox-action-icon.add { color: #4ade80; }
+.winbox-action-icon.remove { color: #f87171; }
+.winbox-action-icon.enable { color: #38bdf8; }
+.winbox-action-icon.disable { color: #fbbf24; }
+
+.winbox-table-wrapper {
+  flex: 1;
+  overflow: auto;
+}
+
+.winbox-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+  font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.winbox-table th {
+  background-color: #1e2b42;
+  color: #94a3b8;
+  font-weight: 600;
+  padding: 5px 8px;
+  text-align: left;
+  border-right: 1px solid #2d3e5e;
+  border-bottom: 1px solid #2d3e5e;
+  position: sticky;
+  top: 0;
+}
+
+.winbox-table td {
+  padding: 4px 8px;
+  border-right: 1px solid #1a2538;
+  border-bottom: 1px solid #1a2538;
+  color: #e2e8f0;
+  white-space: nowrap;
+}
+
+.winbox-table tr:hover {
+  background-color: #1c273a;
+}
+
+.winbox-table tr.selected {
+  background-color: #0369a1 !important;
+  color: white;
+}
+
+@media (max-width: 640px) {
+  .winbox-body {
+    flex-direction: column;
+    height: 420px;
+  }
+  .winbox-sidebar {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    border-right: none;
+    border-bottom: 1px solid #263650;
+    white-space: nowrap;
+  }
+  .winbox-menu-item {
+    border-left: none;
+    border-bottom: 2px solid transparent;
+    padding: 6px 10px;
+  }
+  .winbox-menu-item.active {
+    border-bottom-color: #38bdf8;
+    border-left-color: transparent;
+  }
+}
+

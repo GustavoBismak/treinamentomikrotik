@@ -12,17 +12,17 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Estilos da Plataforma -->
-  <link rel="stylesheet" href="/css/main.css">
-  <link rel="stylesheet" href="/css/modules.css">
-  <link rel="stylesheet" href="/css/winbox.css">
-  <link rel="stylesheet" href="/css/terminal.css">
-  <link rel="stylesheet" href="/css/lab.css">
-  <link rel="stylesheet" href="/css/quiz.css">
-  <link rel="stylesheet" href="/css/admin.css">
-  <link rel="stylesheet" href="/css/certificate.css">
+  <link rel="stylesheet" href="./css/main.css">
+  <link rel="stylesheet" href="./css/modules.css">
+  <link rel="stylesheet" href="./css/winbox.css">
+  <link rel="stylesheet" href="./css/terminal.css">
+  <link rel="stylesheet" href="./css/lab.css">
+  <link rel="stylesheet" href="./css/quiz.css">
+  <link rel="stylesheet" href="./css/admin.css">
+  <link rel="stylesheet" href="./css/certificate.css">
 
   <script>
-    // Detecção precoce de abertura via file://
+    // Detecção precoce de abertura via file:// ou Live Server fora da porta 3000
     if (window.location.protocol === 'file:') {
       window.addEventListener('DOMContentLoaded', function() {
         var app = document.getElementById('app');
@@ -35,7 +35,7 @@
                 'A <strong>Academia Técnica MikroTik</strong> é uma plataforma fullstack com simuladores de RouterOS e banco de dados SQLite. Ela requer o servidor Node.js ativo e não pode ser executada por duplo clique em arquivos locais.' +
               '</p>' +
               '<div style="background:#020617; border:1px solid #334155; border-radius:8px; padding:16px; font-family:\'JetBrains Mono\', monospace; font-size:13px; color:#4ade80; margin-bottom:24px; text-align:left;">' +
-                '<span style="color:#64748b;"># 1. No terminal, execute:</span><br>' +
+                '<span style="color:#64748b;"># 1. No terminal do VS Code / Antigravity, execute:</span><br>' +
                 '<strong style="color:#38bdf8; font-size:15px;">npm start</strong><br><br>' +
                 '<span style="color:#64748b;"># 2. Acesse no navegador:</span><br>' +
                 '<strong style="color:#f8fafc;">http://localhost:3000</strong>' +
@@ -56,6 +56,6 @@
   </div>
 
   <!-- Script Modular ES6 -->
-  <script type="module" src="/js/app.js"></script>
+  <script type="module" src="./js/app.js"></script>
 </body>
 </html>
