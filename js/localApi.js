@@ -447,19 +447,24 @@ export const LocalAPI = {
     };
   },
 
+  async saveFinalProject(data) {
+    return this.submitFinalProject({ ...data, is_final: data.status === 'submitted' });
+  },
+
   async submitFinalProject(data) {
     const user = this._getCurrentUser();
     if (!user) throw new Error('Não autenticado');
 
     const fp = this._getFinalProject() || {};
+    const isSubmitted = data.status === 'submitted' || data.is_final;
     const submission = {
       id: 'fp_' + Date.now(),
       user_id: user.id,
       company_name: data.company_name || 'Empresa Provedor ISP',
       stage_data: data.stage_data || {},
-      status: data.is_final ? 'submitted' : 'draft',
-      grade: data.is_final ? 95 : null,
-      instructor_feedback: data.is_final ? 'Projeto de implantação validado com êxito! Topologia de VLANs, firewall e roteamento aderentes às normas técnicas corporativas.' : null,
+      status: isSubmitted ? 'submitted' : 'draft',
+      grade: isSubmitted ? 95 : null,
+      instructor_feedback: isSubmitted ? 'Projeto de implantação validado com êxito! Topologia de VLANs, firewall e roteamento aderentes às normas técnicas corporativas.' : null,
       submitted_at: new Date().toISOString()
     };
 

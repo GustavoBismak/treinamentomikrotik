@@ -294,7 +294,7 @@ export async function renderFinalProject(container) {
       btnSubmit.querySelector('span').textContent = 'Submetendo...';
 
       try {
-        await API.saveFinalProject({
+        await API.submitFinalProject({
           company_name: 'Logística & Distribuição Express',
           stage_data: stageData,
           status: 'submitted'

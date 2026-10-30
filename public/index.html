@@ -69,13 +69,37 @@
   <!-- Script Modular ES6 -->
   <script type="module" src="./js/app.js"></script>
 
-  <!-- Registro do PWA Service Worker -->
+  <!-- Fallback de Segurança contra Cache Preso em Celulares e GitHub Pages -->
+  <script>
+    setTimeout(function() {
+      var app = document.getElementById('app');
+      if (app && app.innerHTML.includes('Inicializando Academia Técnica')) {
+        console.warn('[Recuperação] Timeout de inicialização detectado. Oferecendo limpeza de cache.');
+        app.innerHTML = '<div style="display:flex; flex-direction:column; justify-content:center; align-items:center; min-height:100vh; background:#070b14; color:#f8fafc; font-family:\'Inter\', -apple-system, sans-serif; padding:20px; text-align:center;">' +
+          '<div style="background:#0f172a; border:1px solid #1e293b; border-radius:12px; padding:32px; max-width:440px; box-shadow:0 20px 25px -5px rgba(0,0,0,0.5);">' +
+            '<div style="font-size:36px; margin-bottom:12px;">⚡</div>' +
+            '<h3 style="font-size:18px; font-weight:700; color:#38bdf8; margin-bottom:8px;">Academia Técnica MikroTik</h3>' +
+            '<p style="color:#94a3b8; font-size:13px; line-height:1.5; margin-bottom:20px;">' +
+              'Detectamos uma atualização recente da plataforma. Clique abaixo para carregar a versão mais recente em seu dispositivo:' +
+            '</p>' +
+            '<button onclick="if(\'caches\' in window){caches.keys().then(function(keys){return Promise.all(keys.map(function(k){return caches.delete(k);}));}).then(function(){location.reload(true);});}else{location.reload(true);}" style="background:#0284c7; color:#fff; border:none; padding:12px 24px; border-radius:8px; font-weight:600; font-size:14px; cursor:pointer; width:100%; box-shadow:0 4px 12px rgba(2,132,199,0.3);">' +
+              'Carregar Versão Atualizada' +
+            '</button>' +
+          '</div>' +
+        '</div>';
+      }
+    }, 4500);
+  </script>
+
+  <!-- Registro do PWA Service Worker com Atualização Imediata -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', function() {
         navigator.serviceWorker.register('./sw.js')
           .then(function(reg) {
-            console.log('[PWA] Service Worker registrado com sucesso! Escopo:', reg.scope);
+            console.log('[PWA] Service Worker registrado! Escopo:', reg.scope);
+            // Força checagem de nova versão imediatamente
+            reg.update();
           })
           .catch(function(err) {
             console.info('[PWA] Service Worker não registrado neste host:', err.message);

@@ -39,13 +39,27 @@ export const API = {
       const data = await res.json().catch(() => ({}));
 
       if (!res.ok) {
-        throw new Error(data.error || `Erro HTTP ${res.status}`);
+        const errorMsg = data.error || `Erro HTTP ${res.status}`;
+        const httpErr = new Error(errorMsg);
+        httpErr.status = res.status;
+        throw httpErr;
       }
 
       return data;
     } catch (err) {
-      // Se a requisição falhar por falta de backend (servidor desligado ou host estático), ativa fallback
-      if (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('404'))) {
+      // Se a requisição falhar por falta de backend (servidor desligado ou rota inexistente), ativa fallback
+      const isRouteOrNetworkIssue = 
+        !err.status || 
+        err.status === 404 || 
+        err.status >= 500 || 
+        (err.message && (
+          err.message.includes('Failed to fetch') || 
+          err.message.includes('NetworkError') || 
+          err.message.includes('404') ||
+          err.message.includes('não encontrada')
+        ));
+
+      if (isRouteOrNetworkIssue) {
         LocalAPI.isStaticMode = true;
       }
       throw err;
@@ -59,7 +73,19 @@ export const API = {
     try {
       return await serverCall();
     } catch (err) {
-      if (LocalAPI.isStaticMode || (err.message && (err.message.includes('Failed to fetch') || err.message.includes('NetworkError') || err.message.includes('404')))) {
+      const isRouteOrNetworkIssue = 
+        LocalAPI.isStaticMode ||
+        !err.status ||
+        err.status === 404 ||
+        err.status >= 500 ||
+        (err.message && (
+          err.message.includes('Failed to fetch') || 
+          err.message.includes('NetworkError') || 
+          err.message.includes('404') ||
+          err.message.includes('não encontrada')
+        ));
+
+      if (isRouteOrNetworkIssue && localCall) {
         LocalAPI.isStaticMode = true;
         return await localCall();
       }
@@ -273,6 +299,13 @@ export const API = {
     return this._exec(
       () => this.request('/api/final-project'),
       () => LocalAPI.getFinalProject()
+    );
+  },
+
+  saveFinalProject(projectData) {
+    return this._exec(
+      () => this.request('/api/final-project/save', { method: 'POST', body: JSON.stringify(projectData) }),
+      () => LocalAPI.saveFinalProject(projectData)
     );
   },
 

@@ -1000,7 +1000,7 @@ const server = http.createServer(async (req, res) => {
         });
       }
 
-      if (pathname === '/api/final-project/save' && method === 'POST') {
+      if ((pathname === '/api/final-project/save' || pathname === '/api/final-project/submit' || pathname === '/api/final-project') && method === 'POST') {
         if (!currentUser) return sendJSON(res, 401, { error: 'Não autenticado' });
         const { company_name, stage_data, status } = await readBody(req);
         const existing = db.prepare('SELECT id FROM final_project_submissions WHERE user_id = ?').get(currentUser.id);

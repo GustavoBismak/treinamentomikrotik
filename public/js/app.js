@@ -71,6 +71,7 @@ class App {
 
   renderLogin() {
     const appEl = document.getElementById('app');
+    if (!appEl) return;
     appEl.classList.add('auth-mode');
     window.location.hash = ''; // Limpa hash para tela de login
     renderLoginView(appEl, (user) => {
@@ -512,7 +513,6 @@ class App {
     modal.querySelector('#btn-close-pwa-modal').addEventListener('click', close);
     modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
   }
-  }
 }
 
 function escapeHtml(s) {
@@ -523,15 +523,11 @@ function startApp() {
   try {
     const app = new App();
     app.init().catch(err => {
-      console.error('Falha na inicialização do app:', err);
-      if (window.location.hostname.includes('github.io')) {
-        app.renderStaticDeploymentNotice();
-      } else {
-        app.renderLogin();
-      }
+      console.info('Inicializando tela de login:', err.message);
+      app.renderLogin();
     });
   } catch (err) {
-    console.error('Falha síncrona:', err);
+    console.error('Falha síncrona na inicialização:', err);
   }
 }
 
