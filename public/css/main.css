@@ -1660,4 +1660,266 @@ p.page-subtitle {
   height: 14px;
 }
 
+/* ==========================================================================
+   FORMULÁRIOS CORPORATIVOS & COMPONENTES GLOBAIS
+   ========================================================================== */
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+  text-transform: none;
+}
+
+.form-input,
+.form-textarea {
+  width: 100%;
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 10px 14px;
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.form-input:focus,
+.form-textarea:focus {
+  border-color: var(--accent-light);
+  box-shadow: 0 0 0 3px var(--accent-glow);
+  background-color: #0d1527;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+  color: var(--text-muted);
+}
+
+.form-textarea {
+  min-height: 90px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.font-mono {
+  font-family: var(--font-mono) !important;
+}
+
+/* ==========================================================================
+   STATUS PILLS & BADGES CORPORATIVOS
+   ========================================================================== */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+.status-green {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--status-success);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.status-blue {
+  background: rgba(2, 132, 199, 0.15);
+  color: var(--accent-light);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.status-amber {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--status-warning);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.status-gray {
+  background: rgba(100, 116, 139, 0.15);
+  color: var(--text-muted);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+}
+
+/* ==========================================================================
+   ACORDEÃO DO PROJETO FINAL (AS 7 ETAPAS)
+   ========================================================================== */
+.stage-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stage-item {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stage-item:hover {
+  border-color: var(--border-medium);
+}
+
+.stage-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background-color: var(--bg-card);
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+}
+
+.stage-header:hover {
+  background-color: var(--bg-elevated);
+}
+
+.stage-title {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.stage-number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-color: var(--accent-primary);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px var(--accent-glow);
+}
+
+.stage-title strong {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stage-title span {
+  display: block;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.stage-toggle-icon {
+  font-size: 11px;
+  color: var(--accent-light);
+  transition: transform 0.25s ease;
+}
+
+.stage-item.open .stage-toggle-icon {
+  transform: rotate(180deg);
+}
+
+.stage-content {
+  display: none;
+  padding: 20px;
+  background-color: var(--bg-surface);
+  border-top: 1px solid var(--border-subtle);
+  animation: fadeIn 0.2s ease;
+}
+
+.stage-item.open .stage-content {
+  display: block;
+}
+
+/* ==========================================================================
+   BASE DE CONHECIMENTO & POPs (MATERIAIS DE APOIO)
+   ========================================================================== */
+.pops-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.pop-card {
+  transition: all 0.2s ease;
+}
+
+.pop-card:hover {
+  border-color: var(--accent-primary) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.pop-card .pop-details {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.pop-card.open .pop-details {
+  display: block;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border-radius: var(--radius-md);
+}
+
+/* Botões utilitários extras */
+.btn-lg {
+  padding: 12px 24px !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+}
+
+.btn-delete-user {
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: #f87171;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-delete-user:hover {
+  background: rgba(239, 68, 68, 0.25);
+  color: #ffffff;
+  border-color: #ef4444;
+}
+
+.btn-review-project {
+  background: rgba(2, 132, 199, 0.15);
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  color: var(--accent-light);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-review-project:hover {
+  background: var(--accent-primary);
+  color: #ffffff;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
 
