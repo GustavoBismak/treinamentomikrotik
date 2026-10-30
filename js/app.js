@@ -122,6 +122,7 @@ class App {
             <h1>Academia MikroTik</h1>
             <span>Treinamento Técnico ISP</span>
           </div>
+          <button class="btn-sidebar-close" id="btn-sidebar-close" aria-label="Fechar menu" title="Fechar menu">✕</button>
         </div>
 
         <nav class="sidebar-nav">
@@ -159,11 +160,15 @@ class App {
             <span>Materiais e POPs ISP</span>
           </a>
 
-          <div class="nav-section-title">Conta</div>
+          <div class="nav-section-title">Conta & App</div>
           <a href="#profile" class="nav-item">
             ${getIcon('user')}
             <span>Perfil e Configurações</span>
           </a>
+          <button class="nav-item btn-pwa-install-nav" id="btn-pwa-install" type="button" title="Instalar aplicativo na tela inicial">
+            ${getIcon('smartphone')}
+            <span>Instalar App no Celular</span>
+          </button>
 
           ${isAdminOrInstructor ? `
             <div class="nav-section-title">Gestão e Ensino</div>
@@ -195,12 +200,20 @@ class App {
       <div class="main-wrapper">
         <header class="topbar">
           <div class="topbar-left">
-            <button class="btn-mobile-menu" id="btn-toggle-menu">
+            <!-- Botão 3 Linhas (Menu Hambúrguer para Celular) -->
+            <button class="btn-mobile-menu" id="btn-toggle-menu" aria-label="Abrir menu lateral" title="Abrir menu lateral">
               ${getIcon('menu')}
             </button>
+
+            <!-- Botão Voltar (Backout) Universal -->
+            <button class="btn-topbar-back" id="btn-topbar-back" aria-label="Voltar à tela anterior" title="Voltar à tela anterior">
+              ${getIcon('arrow-left')}
+              <span class="btn-back-text">Voltar</span>
+            </button>
+
             <div class="breadcrumb">
-              <span>Academia</span>
-              <span>/</span>
+              <span class="breadcrumb-root">Academia</span>
+              <span class="breadcrumb-separator">/</span>
               <span class="current" id="breadcrumb-current">Painel Inicial</span>
             </div>
           </div>
@@ -340,8 +353,9 @@ class App {
       if (searchDropdown) searchDropdown.hidden = true;
     });
 
-    // Menu Mobile
+    // Menu Mobile & Sidebar
     const toggleBtn = document.getElementById('btn-toggle-menu');
+    const closeSidebarBtn = document.getElementById('btn-sidebar-close');
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebar-overlay');
 
@@ -363,6 +377,7 @@ class App {
       }
     });
 
+    closeSidebarBtn?.addEventListener('click', closeSidebar);
     overlay?.addEventListener('click', closeSidebar);
 
     // Fecha a sidebar no celular ao clicar em qualquer item do menu
@@ -373,6 +388,130 @@ class App {
         }
       });
     });
+
+    // ── Botão Voltar (Backout) Universal ──────────────────────────
+    const backBtn = document.getElementById('btn-topbar-back');
+
+    function updateBackButton() {
+      const hash = window.location.hash.slice(1) || 'dashboard';
+      const parts = hash.split('/');
+      const route = parts[0];
+
+      if (backBtn) {
+        if (route === 'dashboard') {
+          backBtn.classList.add('is-dashboard');
+          backBtn.setAttribute('title', 'Você já está no Painel Inicial');
+        } else {
+          backBtn.classList.remove('is-dashboard');
+          backBtn.setAttribute('title', 'Voltar à tela anterior');
+        }
+      }
+    }
+
+    function handleNavigateBack() {
+      const hash = window.location.hash.slice(1) || 'dashboard';
+      const parts = hash.split('/');
+      const route = parts[0];
+
+      if (route === 'dashboard') {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+
+      // Regras hierárquicas claras de retorno
+      if (route === 'lesson') {
+        window.location.hash = '#syllabus';
+      } else if (route === 'module') {
+        window.location.hash = '#syllabus';
+      } else if (route === 'quiz') {
+        window.location.hash = parts[1] ? `#module/${parts[1]}` : '#syllabus';
+      } else if (route === 'lab') {
+        window.location.hash = '#labs';
+      } else {
+        if (window.history.length > 2) {
+          window.history.back();
+        } else {
+          window.location.hash = '#dashboard';
+        }
+      }
+    }
+
+    backBtn?.addEventListener('click', handleNavigateBack);
+    window.addEventListener('hashchange', updateBackButton);
+    updateBackButton();
+
+    // ── Suporte a Instalação PWA no Celular ─────────────────────────
+    let deferredInstallPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      const btn = document.getElementById('btn-pwa-install');
+      if (btn) btn.classList.add('can-install');
+    });
+
+    const installBtn = document.getElementById('btn-pwa-install');
+    installBtn?.addEventListener('click', async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          console.log('[PWA] Usuário aceitou instalar o App!');
+        }
+        deferredInstallPrompt = null;
+      } else {
+        this.renderPwaInstallModal();
+      }
+    });
+  }
+
+  renderPwaInstallModal() {
+    const existing = document.getElementById('pwa-install-modal');
+    if (existing) existing.remove();
+
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+
+    const modal = document.createElement('div');
+    modal.id = 'pwa-install-modal';
+    modal.style.cssText = 'position:fixed; inset:0; background:rgba(0,0,0,0.8); display:flex; align-items:center; justify-content:center; z-index:99999; padding:20px;';
+    modal.innerHTML = `
+      <div style="background:#0f172a; border:1px solid #1e293b; border-radius:16px; padding:28px 24px; max-width:480px; width:100%; box-shadow:0 25px 50px -12px rgba(0,0,0,0.7); color:#f8fafc; font-family:'Inter', sans-serif; text-align:center;">
+        <div style="margin-bottom:16px; display:flex; justify-content:center;">
+          <img src="./images/pwa-icon-192.png" alt="Academia MikroTik" style="width:72px; height:72px; border-radius:16px; box-shadow:0 8px 20px rgba(2,132,199,0.35); border:1px solid rgba(56,189,248,0.4);" />
+        </div>
+        <h3 style="font-size:18px; font-weight:700; color:#38bdf8; margin-bottom:8px;">
+          Instalar Academia MikroTik no Celular
+        </h3>
+        <p style="color:#94a3b8; font-size:13px; line-height:1.5; margin-bottom:20px;">
+          Adicione à tela inicial do seu aparelho para abrir em tela cheia com acesso instantâneo às aulas e laboratórios, igual a um aplicativo nativo.
+        </p>
+
+        <div style="background:#070b14; border:1px solid #1e293b; border-radius:10px; padding:16px; text-align:left; font-size:13px; line-height:1.6; color:#cbd5e1; margin-bottom:22px;">
+          ${isIOS ? `
+            <div style="font-weight:600; color:#38bdf8; margin-bottom:8px;">No iPhone ou iPad (Safari):</div>
+            1. Toque no botão de <strong>Compartilhar</strong> (ícone do quadrado com a seta para cima ⎋ no rodapé do Safari).<br>
+            2. Role a lista e selecione <strong>"Adicionar à Tela de Início"</strong> ➕.<br>
+            3. Toque em <strong>"Adicionar"</strong> no topo direito.
+          ` : `
+            <div style="font-weight:600; color:#38bdf8; margin-bottom:8px;">No Android (Google Chrome):</div>
+            1. Toque nos <strong>3 pontinhos</strong> verticais no canto superior direito do navegador.<br>
+            2. Selecione <strong>"Instalar aplicativo"</strong> ou <strong>"Adicionar à tela inicial"</strong>.<br>
+            3. Confirme para criar o ícone da Academia na tela do seu celular!
+          `}
+        </div>
+
+        <div style="display:flex; justify-content:center;">
+          <button id="btn-close-pwa-modal" style="background:#0284c7; color:#fff; border:none; padding:10px 28px; border-radius:8px; font-weight:600; font-size:14px; cursor:pointer;">
+            Entendido
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+    const close = () => modal.remove();
+    modal.querySelector('#btn-close-pwa-modal').addEventListener('click', close);
+    modal.addEventListener('click', (e) => { if (e.target === modal) close(); });
+  }
   }
 }
 

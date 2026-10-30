@@ -14,6 +14,14 @@ export async function renderSyllabus(container) {
 
     container.innerHTML = `
       <div class="container">
+        <!-- Navegação de Retorno -->
+        <div style="margin-bottom:18px;">
+          <a href="#dashboard" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px;">
+            ${getIcon('arrow-left')}
+            <span>Voltar ao Painel Inicial</span>
+          </a>
+        </div>
+
         <div style="margin-bottom:24px;">
           <h1 class="page-title">Grade Curricular: Academia Técnica MikroTik</h1>
           <p class="page-subtitle">Estrutura progressiva em 15 módulos técnicos, do nível iniciante ao avançado, orientada a redes reais de telecomunicações e empresas.</p>

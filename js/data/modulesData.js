@@ -185,3 +185,4 @@ export const competenciesData = [
   { key: 'recursos_avancados', name: 'Roteamento Dinâmico (OSPF/BGP) e VRRP', category: 'Avançado', description: 'Roteamento interno OSPF, anúncios BGP introdutórios, VRRP alta disponibilidade e scripts.' },
   { key: 'padroes_operacionais', name: 'POPs Técnicos e Procedimentos Operacionais', category: 'Governança', description: 'Execução de POPs de troca, contingência, upgrade de firmware e elaboração de relatório de causa raiz.' }
 ];
+

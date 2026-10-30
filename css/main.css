@@ -48,28 +48,39 @@
   padding: 0;
 }
 
-body {
+html, body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
   font-family: var(--font-sans);
   background-color: var(--bg-main);
   color: var(--text-primary);
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  touch-action: manipulation;
+  margin: 0;
+  padding: 0;
 }
 
 /* App Shell */
 #app {
   display: flex;
   height: 100vh;
-  width: 100vw;
-  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
+  position: relative;
 }
 
 /* Quando a tela de login está ativa, permite scroll */
 #app.auth-mode {
   height: auto;
   min-height: 100vh;
-  overflow: visible;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden !important;
   overflow-y: auto;
 }
 
@@ -279,11 +290,108 @@ body {
 
 .btn-mobile-menu {
   display: none;
-  background: none;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+  width: 42px;
+  height: 42px;
+  min-width: 42px;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-mobile-menu:hover {
+  background: var(--bg-elevated);
+  border-color: var(--accent-primary);
+  color: var(--accent-light);
+}
+
+.btn-mobile-menu:active {
+  transform: scale(0.92);
+  background: var(--accent-glow);
+}
+
+.btn-mobile-menu svg {
+  width: 22px;
+  height: 22px;
+  stroke-width: 2.5;
+}
+
+/* Botão Voltar (Backout) Universal */
+.btn-topbar-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 14px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.btn-topbar-back:hover {
+  background: var(--bg-elevated);
+  border-color: var(--accent-primary);
+  color: var(--accent-light);
+}
+
+.btn-topbar-back:active {
+  transform: scale(0.94);
+}
+
+.btn-topbar-back svg {
+  width: 18px;
+  height: 18px;
+}
+
+.btn-topbar-back.is-dashboard {
+  opacity: 0.45;
+  cursor: default;
+}
+
+/* Botão Fechar Sidebar no Mobile */
+.btn-sidebar-close {
+  display: none;
+  background: transparent;
   border: none;
   color: var(--text-secondary);
+  font-size: 20px;
   cursor: pointer;
-  padding: 4px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  margin-left: auto;
+}
+
+.btn-sidebar-close:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Botão PWA na Sidebar */
+.btn-pwa-install-nav {
+  background: rgba(2, 132, 199, 0.12);
+  border: 1px dashed rgba(56, 189, 248, 0.4);
+  color: var(--accent-light);
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+}
+
+.btn-pwa-install-nav:hover {
+  background: rgba(2, 132, 199, 0.25);
+  color: #fff;
 }
 
 .breadcrumb {
@@ -733,33 +841,62 @@ p.page-subtitle {
 }
 
 @media (max-width: 900px) {
+  html, body, #app, .main-wrapper, .content-viewport, .container {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+  }
+
   .sidebar {
     position: fixed;
     top: 0;
     bottom: 0;
     left: 0;
-    width: 260px;
+    width: 275px;
+    max-width: 85vw;
     transform: translateX(-100%);
-    box-shadow: 0 0 24px rgba(0,0,0,0.8);
+    box-shadow: 0 0 28px rgba(0,0,0,0.85);
     transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 100;
   }
   .sidebar.open {
     transform: translateX(0);
   }
+  .btn-sidebar-close {
+    display: block;
+  }
   .btn-mobile-menu {
     display: flex;
-    align-items: center;
-    justify-content: center;
+  }
+  .btn-topbar-back {
+    display: inline-flex;
+    padding: 8px 10px;
+    height: 40px;
   }
   .topbar {
-    padding: 0 12px;
+    padding: 0 10px;
+    height: 56px;
+    position: sticky;
+    top: 0;
+    z-index: 45;
   }
   .topbar-left {
     gap: 8px;
+    flex: 1;
+    min-width: 0;
+  }
+  .breadcrumb-root, .breadcrumb-separator {
+    display: none;
+  }
+  .breadcrumb span.current {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
   }
   .topbar-search {
-    max-width: 200px;
-    margin: 0 12px;
+    display: none;
   }
   .search-shortcut {
     display: none;
@@ -771,7 +908,18 @@ p.page-subtitle {
     display: none;
   }
   .content-viewport {
-    padding: 16px 12px;
+    padding: 14px 10px;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    overflow-x: hidden !important;
+  }
+  .container {
+    padding: 0 2px;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
+    overflow-x: hidden !important;
   }
 }
 
@@ -785,6 +933,9 @@ p.page-subtitle {
   }
   .card {
     padding: 14px;
+    width: 100% !important;
+    max-width: 100% !important;
+    box-sizing: border-box;
   }
   .stat-widget {
     padding: 12px;
@@ -810,6 +961,43 @@ p.page-subtitle {
   }
   .topbar-search {
     display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn-back-text {
+    display: none;
+  }
+  .btn-topbar-back {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    justify-content: center;
+  }
+  .breadcrumb span.current {
+    max-width: 105px;
+    font-size: 12px;
+  }
+}
+
+/* Proteção global anti-overflow horizontal para celular */
+@media (max-width: 768px) {
+  pre, code, pre code,
+  .terminal-window, .terminal-body,
+  .winbox-window, .winbox-body,
+  .topology-diagram, .evidence-box,
+  table, .table-wrap, .stat-widget, .card,
+  .tech-section, .quiz-card {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    word-break: break-word;
+  }
+
+  .stat-grid, .modules-grid, .labs-grid, .quiz-grid {
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
   }
 }
 

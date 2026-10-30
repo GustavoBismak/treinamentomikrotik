@@ -19,6 +19,14 @@ export async function renderFinalProject(container) {
 
     container.innerHTML = `
       <div class="container">
+        <!-- Navegação de Retorno -->
+        <div style="margin-bottom:18px;">
+          <a href="#dashboard" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px;">
+            ${getIcon('arrow-left')}
+            <span>Voltar ao Painel Inicial</span>
+          </a>
+        </div>
+
         <!-- Topo com Status da Submissão -->
         <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:24px; flex-wrap:wrap; gap:16px;">
           <div>

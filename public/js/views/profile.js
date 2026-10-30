@@ -15,6 +15,14 @@ export async function renderProfile(container) {
 
     container.innerHTML = `
       <div class="container" style="max-width:880px;">
+        <!-- Navegação de Retorno -->
+        <div style="margin-bottom:18px;">
+          <a href="#dashboard" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px;">
+            ${getIcon('arrow-left')}
+            <span>Voltar ao Painel Inicial</span>
+          </a>
+        </div>
+
         <!-- Topo -->
         <div style="margin-bottom:24px;">
           <h1 class="page-title">Perfil do Colaborador & Configurações</h1>

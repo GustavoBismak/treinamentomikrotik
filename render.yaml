@@ -10,3 +10,4 @@ services:
         value: 22.16.0
       - key: PORT
         value: 3000
+

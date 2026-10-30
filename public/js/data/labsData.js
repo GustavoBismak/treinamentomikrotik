@@ -209,3 +209,4 @@ Flags: X - disabled, I - invalid, D - dynamic
     root_cause_explanation: 'Cryptokey Routing e Falha de Roteamento Estático no WireGuard. O WireGuard descarta silenciosamente qualquer pacote cuja rede de destino não esteja declarada explicitamente no campo `allowed-address` do peer. Além disso, sem uma rota estática na tabela de rotas (`/ip route`), o roteador enviava os pacotes para o gateway default da internet em vez da interface virtual wg0.'
   }
 ];
+

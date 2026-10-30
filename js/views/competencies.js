@@ -17,6 +17,14 @@ export async function renderCompetencies(container) {
 
     container.innerHTML = `
       <div class="container">
+        <!-- Navegação de Retorno -->
+        <div style="margin-bottom:18px;">
+          <a href="#dashboard" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px;">
+            ${getIcon('arrow-left')}
+            <span>Voltar ao Painel Inicial</span>
+          </a>
+        </div>
+
         <div style="margin-bottom:24px;">
           <h1 class="page-title">Matriz de Competências Técnicas Operacionais</h1>
           <p class="page-subtitle">Indicadores de proficiência individual e aptidão da equipe para execução de atividades em campo, backbone e clientes corporativos.</p>

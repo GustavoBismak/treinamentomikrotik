@@ -25,6 +25,14 @@ async function renderLabsList(container) {
 
     container.innerHTML = `
       <div class="container">
+        <!-- Navegação de Retorno -->
+        <div style="margin-bottom:18px;">
+          <a href="#dashboard" class="btn btn-secondary btn-sm" style="display:inline-flex; align-items:center; gap:8px;">
+            ${getIcon('arrow-left')}
+            <span>Voltar ao Painel Inicial</span>
+          </a>
+        </div>
+
         <div style="margin-bottom:24px;">
           <h1 class="page-title">Laboratórios Práticos Interativos de Troubleshooting</h1>
           <p class="page-subtitle">Simulações de cenários de falhas reais em redes de provedores e empresas. Formule hipóteses, analise evidências com ferramentas RouterOS e aplique a correção padronizada.</p>
