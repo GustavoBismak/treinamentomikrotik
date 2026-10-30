@@ -1126,11 +1126,15 @@
   background: rgba(0, 0, 0, 0.88);
   backdrop-filter: blur(4px);
   z-index: 10000;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 24px;
+}
+
+.mv-lightbox.active {
+  display: flex;
 }
 
 .mv-lightbox img {

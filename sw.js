@@ -1,5 +1,5 @@
 // SERVICE WORKER DA ACADEMIA TÉCNICA MIKROTIK
-const CACHE_NAME = 'academia-mikrotik-v2.1';
+const CACHE_NAME = 'academia-mikrotik-v2.2';
 
 const STATIC_ASSETS = [
   './',
